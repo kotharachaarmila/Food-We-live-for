@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Explore - Food We Live For</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4fff1;
+      color: #333;
+      animation: fadeIn 1.2s ease-in;
+    }
+    section {
+      padding: 2rem;
+      max-width: 1000px;
+      margin: auto;
+    }
+    h2, h3 {
+      text-align: center;
+      color: #2e7d32;
+      margin-bottom: 1rem;
+    }
+    .box, .card, .tip, .plate-box {
+      border-radius: 10px;
+      padding: 1rem;
+      margin: 1rem 0;
+      animation: slideIn 1s ease-in-out;
+    }
+    .box { background: #fffbe6; border-left: 5px solid #ffc107; }
+    .tip { background: #e6f7ff; border-left: 5px solid #007bff; }
+    .scroll-container, .journey-container {
+      display: flex;
+      overflow-x: auto;
+      gap: 1rem;
+      padding: 1rem 0;
+    }
+    .card {
+      min-width: 200px;
+      padding: 1rem;
+    }
+    .journey {
+      min-width: 120px;
+      text-align: center;
+    }
+    .game {
+      display: flex;
+      gap: 2rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    #plate {
+      width: 200px;
+      height: 200px;
+      border: 2px dashed gray;
+      border-radius: 50%;
+      text-align: center;
+      padding-top: 80px;
+      background: white;
+    }
+    @keyframes fadeIn {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+    @keyframes slideIn {
+      from {transform: translateY(20px); opacity: 0;}
+      to {transform: translateY(0); opacity: 1;}
+    }
+  </style>
+</head>
+<body>
+  <section>
+    <h2>🌱 Explore & Learn – SDG 2 Interactive</h2>
+
+    <!-- 1. Fun Fact of the Day -->
+    <div class="box">
+      <h3>🍽 Fun Fact of the Day</h3>
+      <p id="fun-fact-text">Loading a fun fact...</p>
+    </div>
+
+    <!-- 2. Scroll Story -->
+    <h3>📖 SDG 2 Scroll Story</h3>
+    <div class="scroll-container">
+      <div class="card" style="background: #e0ffe0;">🌾 <strong>What is SDG 2?</strong><br>End hunger, improve nutrition & promote sustainable farming.</div>
+      <div class="card" style="background: #fff3cd;">👩‍🌾 <strong>Why hunger exists?</strong><br>Poverty, climate issues, wars, and food waste.</div>
+      <div class="card" style="background: #d1ecf1;">🍚 <strong>How can we help?</strong><br>Waste less food, eat local, and donate wisely!</div>
+    </div>
+
+    <!-- 3. Farm to Plate Journey -->
+    <h3>🚜 From Farm to Plate</h3>
+    <div class="journey-container">
+      <div class="journey" style="background: #fff3cd;">🚜<br>Grow</div>
+      <div class="journey" style="background: #c3e6cb;">🧺<br>Harvest</div>
+      <div class="journey" style="background: #d1ecf1;">🚚<br>Transport</div>
+      <div class="journey" style="background: #f8d7da;">🛒<br>Buy & Eat</div>
+    </div>
+
+    <!-- 4. Healthy Plate Game -->
+    <h3>🍽 Healthy Plate Game</h3>
+    <p>Drag the healthy food items into the plate!</p>
+    <div class="game">
+      <div id="foods" style="display: flex; flex-direction: column; gap: 10px;">
+        <div draggable="true" ondragstart="drag(event)" id="fruit">🍎 Fruit</div>
+        <div draggable="true" ondragstart="drag(event)" id="veg">🥦 Vegetable</div>
+        <div draggable="true" ondragstart="drag(event)" id="candy">🍬 Candy</div>
+        <div draggable="true" ondragstart="drag(event)" id="bread">🍞 Bread</div>
+      </div>
+      <div id="plate" ondrop="drop(event)" ondragover="allowDrop(event)">Drop here!</div>
+    </div>
+    <button onclick="checkPlate()">✅ Check My Plate</button>
+    <p id="plate-result" style="font-weight: bold; color: #007bff;"></p>
+
+    <!-- 5. Nutrition Tips -->
+    <div class="tip">
+      <strong>🍀 Nutrition Tip:</strong>
+      <p id="tip-text">Loading tip...</p>
+    </div>
+  </section>
+
+  <script>
+    // Fun Fact
+    const facts = [
+      "One banana gives enough energy for a 1-hour walk!",
+      "Rice is eaten by more than half the world every day!",
+      "Carrots were originally purple in color!",
+      "Potatoes were the first vegetable grown in space!",
+      "Apples float in water because they are 25% air!"
+    ];
+    document.getElementById("fun-fact-text").innerText = facts[Math.floor(Math.random() * facts.length)];
+
+    // Healthy Plate Game
+    function allowDrop(ev) { ev.preventDefault(); }
+    function drag(ev) { ev.dataTransfer.setData("text", ev.target.id); }
+    function drop(ev) {
+      ev.preventDefault();
+      const data = ev.dataTransfer.getData("text");
+      const dragged = document.getElementById(data);
+      if (!ev.target.contains(dragged)) {
+        ev.target.appendChild(dragged);
+      }
+    }
+    function checkPlate() {
+      const plate = document.getElementById("plate");
+      const items = [...plate.querySelectorAll("div")].map(el => el.id);
+      const result = document.getElementById("plate-result");
+      if (items.includes("fruit") && items.includes("veg") && !items.includes("candy")) {
+        result.innerText = "🎉 Great job! Your plate is healthy!";
+      } else {
+        result.innerText = "⚠ Try again! Add only healthy food.";
+      }
+    }
+
+    // Nutrition Tips
+    const tips = [
+      "Drink 8 glasses of water a day 💧",
+      "Eat more fruits and veggies 🥕🍇",
+      "Avoid too much sugar 🍬",
+      "Eat slowly and chew well 🍽",
+      "Include protein in every meal 🥚"
+    ];
+    let tipIndex = 0;
+    function showTip() {
+      document.getElementById("tip-text").innerText = tips[tipIndex];
+      tipIndex = (tipIndex + 1) % tips.length;
+    }
+    showTip();
+    setInterval(showTip, 4000);
+  </script>
+</body>
+</html>

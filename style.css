@@ -1,0 +1,757 @@
+@import url('https://fonts.googleapis.com/css2?family=poppins');
+
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border;
+    font-family: 'poppins', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: url('bg3.jpg') no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+
+header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 90%;
+    padding: 10px 90px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    z-index: 99;
+}
+
+.logo {
+    font-size: 2em;
+    color: #162938;
+    user-select: none;
+}
+
+.navigation a {
+    position: relative;
+    font-size: 1.1em;
+    color: #162938;
+    text-decoration: none;
+    font-weight: 500;
+    margin-left: 40px;
+}
+
+.navigation a::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -6px;
+    width: 100%;
+    height: 3px;
+    background: #fff;
+    border-radius: 5px;
+    transform-origin: right;
+    transform: scaleX(0);
+    transition: transform.5s;
+}
+
+.navigation a:hover::after {
+    transform-origin: left;
+    transform: scaleX(1);
+}
+
+.wrapper {
+    position: relative;
+    width: 400px;
+    height: 440px;
+    background: transparent;
+    border: 2px solid rgba(10, 0, 0, 0.5);
+    border-radius: 20px;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 0 30px rgba(0, 0, 0, .5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    transform: scale(0);
+    transition: transform .5s ease, height .2s ease;
+}
+
+.wrapper.active-popup {
+    transform: scale(1);
+}
+
+.wrapper.active {
+    height: 520px;
+}
+
+.wrapper .formbox {
+    width: 100%;
+    padding: 40px;
+}
+
+.wrapper .form-box.login {
+    transition: transform .18s ease;
+    transform: translateX(0);
+}
+
+.wrapper.active .form-box.login {
+    transition: none;
+    transform: translateX(-400px);
+}
+
+.wrapper .form-box.register {
+    position: absolute;
+    transition: none;
+    transform: translateX(400px);
+}
+
+.wrapper.active .form-box.register {
+    transition: transform .18s ease;
+    transform: translateX(0);
+}
+
+.wrapper .icon-close {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 45px;
+    height: 45px;
+    background: #162938;
+    font-size: 2em;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-bottom-left-radius: 20px;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.formbox h2 {
+    font-size: 2em;
+    color: #162938;
+    text-align: center;
+}
+
+.input-box {
+    position: relative;
+    width: 100%;
+    height: 30px;
+    border-bottom: 2px solid #162938;
+    margin: 30px 0;
+}
+
+.input-box label {
+    position: absolute;
+    top: 15%;
+    left: 5px;
+    transform: translate(-10%);
+    font-size: 1em;
+    color: #162938;
+    font-weight: 500;
+    pointer-events: none;
+    transition: .5s;
+}
+
+.input-box input:focus~label,
+.input-box input:valid~label {
+    top: -20px;
+}
+
+.input-box input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-size: 1em;
+    color: #162938;
+    font-weight: 200;
+    padding: 0 35px 0 5px;
+}
+
+.input-box .icon {
+    position: absolute;
+    right: 8px;
+    font-size: 1.2em;
+    color: #162938;
+    line-height: 50px;
+}
+
+.navigation .btnDonate-popup {
+    width: 90px;
+    height: 40px;
+    background: transparent;
+    border: 2px solid #162938;
+    outline: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.1em;
+    color: #000;
+    font-weight: 500;
+    margin-left: 40px;
+    transition: .5s;
+    display: inline-block;
+}
+
+.navigation .btnDonate-popup:hover {
+    background: #fff;
+    color: #000;
+}
+
+#donatepopup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    width: 350px;
+    padding: 30px;
+    background: rgb(255, 255, 255, 0.15);
+    border-radius: 20px;
+    backdrop-filter: blur(12px);
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+    z-index: 1000;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+#donatepopup.active {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+#donatepopup h2 {
+    color: #fff;
+    margin-bottom: 20px;
+    font-size: 1.8em;
+}
+
+#donatepopup input,
+#donatepopup select,
+#donatepopup button {
+    width: 100%;
+    margin: 10px 0;
+    padding: 10px;
+    font-size: 1em;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    font-family: 'poppins', sans-serif;
+}
+
+#donatepopup input,
+#donatepopup select {
+    background: rgba(255, 255, 255, 0.6);
+    color: #000;
+}
+
+#donatepopup button {
+    background: orangered;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+
+#donatepopup button:hover {
+    background: #166d2f;
+}
+
+
+#donatepopup.icon-close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    width: 45px;
+    height: 45px;
+    background: transparent;
+    font-size: 1.5em;
+    color: #fff;
+    border-bottom-left-radius: 20px;
+    cursor: pointer;
+}
+
+.navigation .btnhome-popup {
+    width: 90px;
+    height: 40px;
+    background: transparent;
+    border: 2px solid #162938;
+    outline: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.1em;
+    color: #000;
+    font-weight: 500;
+    margin-left: 40px;
+    transition: .5s;
+}
+
+.navigation .btnhome-popup:hover {
+    background: #fff;
+    color: #000;
+}
+
+.navigation .btnabout-popup {
+    width: 90px;
+    height: 40px;
+    background: transparent;
+    border: 2px solid #162938;
+    outline: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.1em;
+    color: #000;
+    font-weight: 500;
+    margin-left: 40px;
+    transition: .5s;
+}
+
+.navigation .btnabout-popup:hover {
+    background: #fff;
+    color: #000;
+}
+
+.navigation .btnquiz-popup {
+    width: 90px;
+    height: 40px;
+    background: transparent;
+    border: 2px solid #162938;
+    outline: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.1em;
+    color: #000;
+    font-weight: 500;
+    margin-left: 40px;
+    display: inline-block;
+    transition: .5s;
+}
+
+.navigation .btnquiz-popup:hover {
+    background: #fff;
+    color: #000;
+}
+
+.content-section {
+    width: 80%;
+    max-width: 800px;
+    margin: 100px auto 50px;
+    padding: 30px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    color: #000;
+    text-align: center;
+    font-size: 1.1em;
+}
+
+section {
+    padding: 100px 50px;
+    margin-top: 60px;
+    color: #162938;
+    background-color: rgba(255, 255, 255, 0.7);
+    border-radius: 20px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    max-width: 900px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+section {
+    padding: 80px 40px;
+    text-align: center;
+}
+
+section h1 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    color: #162938;
+}
+
+section p {
+    font-size: 1.2em;
+    color: #444;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+nav {
+    margin-bottom: 0;
+    padding-bottom: 0;
+}
+
+#welcome,
+.welcome {
+    margin-top: 0;
+    padding-top: 0;
+}
+
+#welcome h1,
+.welcome h1 {
+    margin-top: 0;
+}
+
+#home {
+    padding-top: 150px;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+#welcome {
+    padding-top: 120px;
+}
+
+#home .open-login {
+    padding: 12px 25px;
+    font-size: 18px;
+    background: linear-gradient(135deg, #00b4db, #0083b0);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    margin-top: 20px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+}
+
+#home .open-login {
+    background: linear-gradient(135deg, #00b4db, #0083b0);
+    transform: scale(1.05);
+}
+
+.profile-box {
+    position: fixed;
+    left: 0;
+    top: 100px;
+    background: rgba(255, 255, 255, 0.2);
+    padding: 15px;
+    border-radius: 10px;
+    text-align: left;
+    color: #000;
+    width: 220px;
+}
+
+#profile-preview {
+    width: 100%;
+    margin-top: 10px;
+    border-radius: 10px;
+}
+
+main,
+.container,
+body {
+    display: block;
+}
+
+.explore-btn {
+    text-decoration: none;
+    color: white;
+    background-color: #50db00;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    display: inline-block;
+    transition: background-color 0.3s ease;
+}
+
+.explore-btn:hover {
+    background-color: #00b4db;
+}
+
+.styled-btn {
+    padding: 12px 24px;
+    background-color: #ff9800;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+    display: inline-block;
+    margin-top: 15px;
+}
+
+.styled-btn:hover {
+    background-color: #009de6;
+}
+
+.center-btn {
+    text-align: center;
+}
+
+.pledge-section {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 40px 20px;
+    text-align: center;
+    backdrop-filter: blur(8px);
+    border-radius: 16px;
+    width: 90%;
+    margin: 40px auto;
+    max-width: 1000px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+#pledgeForm {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+#pledgeForm input {
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+#pledgeForm button {
+    padding: 12px;
+    font-weight: bold;
+    background: #28a745;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#pledgeForm button:hover {
+    background: #218838;
+}
+
+.pledge-wall {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 30px;
+    gap: 15px;
+}
+
+.pledge-tile {
+    background: #fff;
+    border-left: 6px solid #28a745;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    border-radius: 8px;
+    max-width: 280px;
+    word-wrap: break-word;
+}
+
+.map-section {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 40px 20px;
+    text-align: center;
+    backdrop-filter: blur(8px);
+    margin: 40px auto;
+    border-radius: 16px;
+    width: 90%;
+    max-width: 1000px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+
+#hungerMap {
+    height: 400px;
+    width: 90%;
+    max-width: 800px;
+    margin: 20px auto;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.donate-btn {
+    margin-top: 20px;
+    padding: 14px 24px;
+    font-size: 18px;
+    border: none;
+    background-color: #39a7e6;
+    color: white;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.donate-btn:hover {
+    background-color: #c92435;
+}
+
+.fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+}
+
+.fade-in.appear {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.spot-count {
+    font-size: 18px;
+    color: #555;
+    margin-bottom: 10px;
+    font-style: italic;
+}
+
+.story-section {
+    padding: 40px 20px;
+    background: rgba(255, 255, 255, 0.15);
+    text-align: center;
+    backdrop-filter: blur(8px);
+    border-radius: 15px;
+    margin: 40px auto;
+    width: 90%;
+    max-width: 1000px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+
+}
+/* 🙏 Thank You Section */
+.thank-you-section {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: #fff;
+  text-align: center;
+  padding: 50px 20px;
+  margin-top: 60px;
+  border-radius: 20px;
+  max-width: 850px;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.15);
+}
+
+.thank-you-section h2 {
+  font-size: 32px;
+  margin-bottom: 20px;
+  color: #000;
+  text-shadow: 1px 1px 3px #000;
+}
+
+.thank-you-section p {
+  font-size: 18px;
+  margin: 10px 0;
+  color: #fff;
+  text-shadow: 0 1px 2px #000;
+}
+/* 🌐 Social Share Section */
+.social-share {
+  text-align: center;
+  padding: 40px 20px;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  max-width: 800px;
+  margin: 60px auto 30px;
+  color: #fff;
+  box-shadow: 0 0 15px rgba(255,255,255,0.1);
+}
+
+.social-share h3 {
+  font-size: 26px;
+  margin-bottom: 10px;
+  color: #ffeaa7;
+}
+
+.social-share p {
+  margin-bottom: 20px;
+  font-size: 16px;
+  color: #eee;
+}
+
+.social-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+}
+
+.social-buttons a {
+  padding: 10px 20px;
+  background-color: #f39c12;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: background 0.3s ease;
+}
+
+.social-buttons a:hover {
+  background-color: #d35400;
+}/* 🌟 Welcome and About Section - Glassy, Blur Effect */
+.welcome-section,
+.about-section {
+  background: rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 50px 30px;
+  margin: 40px auto;
+  text-align: center;
+  color: #fff;
+  width: 90%;
+  max-width: 1000px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.welcome-section h1,
+.about-section h1 {
+  font-size: 36px;
+  margin-bottom: 20px;
+  color: #ffeaa7;
+  text-shadow: 1px 1px 3px #000;
+}
+
+.welcome-section p,
+.about-section p {
+  font-size: 18px;
+  line-height: 1.6;
+  color: #f1f1f1;
+  text-shadow: 0 1px 2px #000;
+}
+.story-section {
+  padding: 40px 20px;
+  background: rgba(245, 245, 245, 0.9);
+  text-align: center;
+}
+
+.story-wall {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+}
+
+.story-card {
+  background: white;
+  border-left: 6px solid #28a745;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: left;
+}
+
+.story-card img {
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  margin-bottom: 10px;
+}

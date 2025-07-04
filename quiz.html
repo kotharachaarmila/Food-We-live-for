@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quiz</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1350&q=80') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .quiz-container {
+      width: 90%;
+      max-width: 700px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border-radius: 20px;
+      padding: 30px;
+      color: #fff;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      text-align: center;
+      transition: 0.5s ease;
+    }
+
+    h1, h2, h3, p {
+      color: #ffffff;
+    }
+
+    .screen {
+      display: none;
+    }
+
+    .screen.active {
+      display: block;
+      animation: fadeIn 0.6s ease;
+    }
+
+    input#username {
+      padding: 12px;
+      border-radius: 10px;
+      width: 80%;
+      margin: 15px 0;
+      font-size: 18px;
+      border: 2px solid #ffffff;
+      background-color: rgba(255, 255, 255, 0.3);
+      color: white;
+    }
+
+    input#username::placeholder {
+      color: #ddd;
+    }
+
+    button {
+      padding: 12px 24px;
+      background-color: rgba(76, 175, 80, 0.8);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+      margin: 10px;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    button:hover {
+      background-color: rgba(76, 175, 80, 1);
+      transform: scale(1.05);
+    }
+
+    #options-container button {
+      display: block;
+      width: 80%;
+      margin: 10px auto;
+      font-size: 18px;
+      border: 2px solid #4caf50;
+      background-color: rgba(255, 255, 255, 0.2);
+      color: #fff;
+      border-radius: 10px;
+      transition: 0.3s ease;
+    }
+
+    #options-container button:hover {
+      background-color: rgba(255, 255, 255, 0.3);
+    }
+
+    #options-container button.correct {
+      background-color: #81c784;
+      color: black;
+      border-color: #2e7d32;
+    }
+
+    #options-container button.wrong {
+      background-color: #e57373;
+      color: black;
+      border-color: #c62828;
+    }
+
+    .quiz-controls {
+      margin-top: 20px;
+    }
+
+    .stop-btn {
+      background-color: rgba(244, 67, 54, 0.8);
+    }
+
+    .stop-btn:hover {
+      background-color: rgba(244, 67, 54, 1);
+    }
+
+    #leaderboard-list {
+      text-align: left;
+      padding: 0;
+      list-style: none;
+      margin-top: 10px;
+      color: #fff;
+    }
+
+    #leaderboard-list li {
+      background: rgba(255,255,255,0.2);
+      padding: 10px;
+      border-radius: 8px;
+      margin: 5px 0;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 600px) {
+      .quiz-container {
+        padding: 20px;
+      }
+
+      input#username {
+        width: 100%;
+      }
+
+      #options-container button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="quiz-container">
+    <!-- Start Screen -->
+    <div id="start-screen" class="screen active">
+      <h1>Ready to test your knowledge?</h1>
+      <input type="text" id="username" placeholder="Enter your name" />
+      <button onclick="startQuiz()">Start Quiz</button>
+    </div>
+
+    <!-- Quiz Screen -->
+    <div id="quiz-screen" class="screen">
+      <h2 id="question-text"></h2>
+      <div id="options-container"></div>
+      <div class="quiz-controls">
+        <button onclick="stopQuiz()" class="stop-btn">Stop Quiz</button>
+      </div>
+    </div>
+
+    <!-- Result Screen -->
+    <div id="result-screen" class="screen">
+      <h2>Quiz Completed!</h2>
+      <p id="final-score"></p>
+      <p id="correct-count"></p>
+      <p id="wrong-count"></p>
+      <p id="attempted-count"></p>
+      <h3>Leaderboard</h3>
+      <ul id="leaderboard-list"></ul>
+      <button onclick="restartQuiz()">Try Again</button>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      { question: "🥕 Which vitamin is most present in carrots?", options: ["Vitamin A", "Vitamin C"], correct: 0 },
+      { question: "⚡ Which food gives you energy quickly?", options: ["Sugar", "Lentils"], correct: 0 },
+      { question: "🌾 Which grain is a major food crop?", options: ["Wheat", "Coconut"], correct: 0 },
+      { question: "🎯 What does SDG 2 stand for?", options: ["Zero Hunger", "Clean Water"], correct: 0 },
+      { question: "💪 Which food builds muscles?", options: ["Eggs", "Candy"], correct: 0 },
+      { question: "🌱 Which part of the plant is a carrot?", options: ["Root", "Stem"], correct: 0 },
+      { question: "🦴 Which nutrient helps build strong bones?", options: ["Calcium", "Fat"], correct: 0 },
+      { question: "🌾 Rice grows best in?", options: ["Water-filled fields", "Dry deserts"], correct: 0 },
+      { question: "🥛 Milk is a rich source of?", options: ["Calcium", "Iron"], correct: 0 },
+      { question: "🍎 Which is a healthy snack?", options: ["Fruit", "Chips"], correct: 0 },
+      { question: "🫘 Which food gives us protein?", options: ["Beans", "Candy"], correct: 0 },
+      { question: "🍌 Where do bananas grow?", options: ["On trees", "Under the ground"], correct: 0 },
+      { question: "🍇 Which food contains natural sugar?", options: ["Fruits", "Chips"], correct: 0 },
+      { question: "🚨 What does malnutrition mean?", options: ["Lack of proper food", "Eating too much"], correct: 0 },
+      { question: "👁 Which food helps improve eyesight?", options: ["Carrots", "Ice cream"], correct: 0 },
+      { question: "🐄 Which food comes from animals?", options: ["Cheese", "Spinach"], correct: 0 },
+      { question: "🌾 Which food is a good source of fiber?", options: ["Whole grains", "Candy"], correct: 0 },
+      { question: "🍽 How many meals should we eat daily?", options: ["3", "1"], correct: 0 },
+      { question: "🥗 What is a balanced diet?", options: ["Eating all food groups", "Only eating sweets"], correct: 0 },
+      { question: "🏠 Which is better: homemade food or junk food?", options: ["Homemade", "Junk"], correct: 0 },
+      { question: "🐝 Where does honey come from?", options: ["Bees", "Cows"], correct: 0 },
+      { question: "🌏 What is the main food for more than half the world?", options: ["Rice", "Pizza"], correct: 0 },
+      { question: "🦠 Which food helps in digestion?", options: ["Yogurt", "Chocolate"], correct: 0 },
+      { question: "🎨 What gives color to fruits and vegetables?", options: ["Natural pigments", "Plastic"], correct: 0 },
+      { question: "🍃 Which is rich in iron?", options: ["Spinach", "Cake"], correct: 0 },
+      { question: "🍲 Which is healthier: steamed or fried food?", options: ["Steamed", "Fried"], correct: 0 },
+      { question: "🔋 Which food group gives us energy?", options: ["Carbohydrates", "Water"], correct: 0 },
+      { question: "🌻 Where does wheat grow?", options: ["In fields", "On trees"], correct: 0 },
+      { question: "🍊 Which fruit is high in vitamin C?", options: ["Orange", "Potato"], correct: 0 },
+      { question: "🍳 Which meal is the most important?", options: ["Breakfast", "Dinner"], correct: 0 },
+      { question: "💧 Which is better for hydration?", options: ["Water", "Soda"], correct: 0 },
+      { question: "🧠 Why do we eat food?", options: ["To get energy", "Just for fun"], correct: 0 },
+      { question: "👨‍🌾 What do farmers use to grow crops?", options: ["Soil", "Plastic"], correct: 0 },
+      { question: "🥣 Which food group includes lentils?", options: ["Proteins", "Fats"], correct: 0 },
+      { question: "🐄 Where do we get dairy products from?", options: ["Animals", "Plants"], correct: 0 },
+      { question: "🍅 What is the color of ripe tomatoes?", options: ["Red", "Green"], correct: 0 },
+      { question: "🇨🇳 Which country produces the most rice?", options: ["China", "USA"], correct: 0 },
+      { question: "🍟 Which food is not healthy?", options: ["French fries", "Fruits"], correct: 0 },
+      { question: "🌞 What do plants need to grow?", options: ["Water and sunlight", "Milk and sugar"], correct: 0 },
+      { question: "🍏 Which of these is a fruit?", options: ["Apple", "Potato"], correct: 0 },
+      { question: "🌽 Which is better: seasonal food or packaged food?", options: ["Seasonal", "Packaged"], correct: 0 },
+      { question: "🥛 What is the natural color of milk?", options: ["White", "Blue"], correct: 0 },
+      { question: "🍦 Which of these is not a vegetable?", options: ["Ice cream", "Carrot"], correct: 0 },
+      { question: "🚜 How do we get food from animals?", options: ["Farming and livestock", "Computers"], correct: 0 },
+      { question: "❤ Which food keeps our heart healthy?", options: ["Nuts", "French fries"], correct: 0 },
+      { question: "🪴 Where do leafy vegetables grow?", options: ["In soil", "On water"], correct: 0 },
+      { question: "🌾 Which of these is a whole grain?", options: ["Brown rice", "White bread"], correct: 0 },
+      { question: "🥤 Which drink is best for kids?", options: ["Milk", "Cola"], correct: 0 },
+      { question: "💦 What do farmers use to water crops?", options: ["Irrigation", "Balloons"], correct: 0 },
+      { question: "🧠 Which food helps your brain work better?", options: ["Fish", "Candy"], correct: 0 },
+      { question: "🍽 What does hunger mean?", options: ["Lack of food", "Full stomach"], correct: 0 },
+      { question: "🧪 Which organ helps digest food?", options: ["Stomach", "Lungs"], correct: 0 },
+      { question: "👶 Which food is best for growing kids?", options: ["Milk and veggies", "Chips"], correct: 0 },
+      { question: "🥥 Where do coconuts grow?", options: ["On palm trees", "Under ground"], correct: 0 },
+      { question: "🍬 What gives fruits their sweetness?", options: ["Natural sugars", "Salt"], correct: 0 },
+      { question: "💪 Which food group helps us grow?", options: ["Proteins", "Sweets"], correct: 0 },
+      { question: "👨‍🌾 What do we call people who grow food?", options: ["Farmers", "Doctors"], correct: 0 },
+      { question: "🌾 What is famine?", options: ["Extreme food shortage", "Festival"], correct: 0 },
+      { question: "🥥 Which of these is a healthy drink?", options: ["Coconut water", "Soda"], correct: 0 },
+      { question: "🌿 What do you call farming without chemicals?", options: ["Organic farming", "Fast farming"], correct: 0 },
+      { question: "🍃 Which part of the plant is spinach?", options: ["Leaf", "Root"], correct: 0 },
+      { question: "🌞 Which vitamin comes from sunlight?", options: ["Vitamin D", "Vitamin B"], correct: 0 },
+      { question: "🪱 What helps plants grow naturally in soil?", options: ["Worms", "Glue"], correct: 0 },
+      { question: "🥬 Which vegetable has lots of iron?", options: ["Spinach", "Iceberg lettuce"], correct: 0 },
+      { question: "🍚 What is polished white rice missing?", options: ["Fiber", "Water"], correct: 0 },
+      { question: "🧴 Which vitamin is in fish oil?", options: ["Vitamin D", "Vitamin C"], correct: 0 },
+      { question: "🍲 Which Indian dish contains lentils?", options: ["Dal", "Rasgulla"], correct: 0 },
+      { question: "🌳 What is agroforestry?", options: ["Growing trees with crops", "Growing only flowers"], correct: 0 },
+      { question: "🌿 What is millet?", options: ["A grain", "A fruit"], correct: 0 },
+      { question: "🥒 Which is a water-rich vegetable?", options: ["Cucumber", "Potato"], correct: 0 },
+      { question: "🚰 Why should we wash vegetables?", options: ["To remove germs", "To cool them"], correct: 0 },
+      { question: "🐓 Eggs are rich in?", options: ["Protein", "Sugar"], correct: 0 },
+      { question: "🍗 Which is a lean meat?", options: ["Chicken", "Bacon"], correct: 0 },
+      { question: "🥑 Which fat is healthy?", options: ["Unsaturated fat", "Trans fat"], correct: 0 },
+      { question: "🍰 Which food has empty calories?", options: ["Cake", "Brown rice"], correct: 0 },
+      { question: "🧃 Fresh juice or canned juice?", options: ["Fresh", "Canned"], correct: 0 },
+      { question: "🥗 Which plate is healthy?", options: ["Veggies + Grains", "Chips + Soda"], correct: 0 },
+      { question: "🧼 What helps prevent food poisoning?", options: ["Clean hands", "Dirty hands"], correct: 0 },
+      { question: "🚱 Can we drink untreated pond water?", options: ["No", "Yes"], correct: 0 },
+      { question: "👩‍🌾 Who helps supply food to cities?", options: ["Farmers", "Pilots"], correct: 0 }
+];     // Add more questions...
+
+    let currentQuestion = 0;
+    let score = 0;
+    let userName = "";
+
+    function startQuiz() {
+      const nameInput = document.getElementById("username");
+      if (nameInput.value.trim() === "") {
+        alert("Please enter your name to start.");
+        return;
+      }
+
+      userName = nameInput.value.trim();
+      document.getElementById("start-screen").classList.remove("active");
+      document.getElementById("quiz-screen").classList.add("active");
+
+      questions.sort(() => Math.random() - 0.5); // Shuffle questions
+      currentQuestion = 0;
+      score = 0;
+      showQuestion();
+    }
+
+   function showQuestion() {
+  if (currentQuestion >= questions.length) {
+    stopQuiz();
+    return;
+  }
+
+  const q = questions[currentQuestion];
+  document.getElementById("question-text").textContent = q.question;
+
+  const container = document.getElementById("options-container");
+  container.innerHTML = "";
+
+  // Create a shuffled copy of options with index mapping
+  const shuffled = q.options.map((option, index) => ({ option, index }));
+  shuffled.sort(() => Math.random() - 0.5); // Shuffle options
+
+  shuffled.forEach((item) => {
+    const btn = document.createElement("button");
+    btn.textContent = item.option;
+
+    btn.onclick = () => {
+      const isCorrect = item.index === q.correct;
+
+      const allBtns = document.querySelectorAll("#options-container button");
+      allBtns.forEach(b => b.disabled = true);
+
+      if (isCorrect) {
+        btn.classList.add("correct");
+        score++;
+      } else {
+        btn.classList.add("wrong");
+        // Highlight the correct one
+        const correctBtn = Array.from(allBtns).find(b =>
+          b.textContent === q.options[q.correct]
+        );
+        if (correctBtn) correctBtn.classList.add("correct");
+      }
+
+      setTimeout(() => {
+        currentQuestion++;
+        showQuestion();
+      }, 1000);
+    };
+
+    container.appendChild(btn);
+  });
+}
+
+    function checkAnswer(selectedIndex, buttonEl) {
+      const q = questions[currentQuestion];
+      const allBtns = document.querySelectorAll("#options-container button");
+
+      allBtns.forEach(btn => btn.disabled = true);
+
+      if (selectedIndex === q.correct) {
+        buttonEl.classList.add("correct");
+        score++;
+      } else {
+        buttonEl.classList.add("wrong");
+        allBtns[q.correct].classList.add("correct");
+      }
+
+      setTimeout(() => {
+        currentQuestion++;
+        showQuestion();
+      }, 1000);
+    }
+
+    function stopQuiz() {
+      document.getElementById("quiz-screen").classList.remove("active");
+      document.getElementById("result-screen").classList.add("active");
+
+      const attempted = currentQuestion;
+      const wrong = attempted - score;
+
+      document.getElementById("final-score").textContent = `Hi ${userName}!`;
+      document.getElementById("correct-count").textContent = `✔ Correct Answers: ${score}`;
+      document.getElementById("wrong-count").textContent = `❌ Wrong Answers: ${wrong}`;
+      document.getElementById("attempted-count").textContent = `📝 Total Attempted: ${attempted}`;
+
+      updateLeaderboard(score, wrong, attempted);
+    }
+
+    function updateLeaderboard(correct, wrong, attempted) {
+      const leaderboard = JSON.parse(localStorage.getItem("leaderboard") || "[]");
+
+      leaderboard.push({ name: userName, correct, wrong, attempted });
+      leaderboard.sort((a, b) => b.correct - a.correct); // Highest correct first
+
+      localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
+
+      const list = document.getElementById("leaderboard-list");
+      list.innerHTML = "";
+      leaderboard.slice(0, 5).forEach((entry, index) => {
+        const li = document.createElement("li");
+        li.innerHTML = `
+          <strong>${index + 1}. ${entry.name}</strong><br>
+          ✔ Correct: ${entry.correct} | ❌ Wrong: ${entry.wrong} | 📝 Attempted: ${entry.attempted}
+        `;
+        list.appendChild(li);
+      });
+    }
+
+    function restartQuiz() {
+      location.reload();
+    }
+  </script>
+</body>
+
+</html>

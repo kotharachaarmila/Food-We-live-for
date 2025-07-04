@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Donate - Food We Live For</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+      background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+        url('https://images.unsplash.com/photo-1498837167922-ddd27525d352') no-repeat center center fixed;
+      background-size: cover;
+      color: white;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .donation-container {
+      background-color: rgba(255, 255, 255, 0.1);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 20px rgba(255,255,255,0.2);
+      max-width: 500px;
+      width: 100%;
+      backdrop-filter: blur(10px);
+    }
+
+    .donation-container h2 {
+      text-align: center;
+      margin-bottom: 25px;
+      font-size: 26px;
+      color: #ffeaa7;
+    }
+
+    .donation-form input,
+    .donation-form select {
+      width: 100%;
+      padding: 12px;
+      margin-bottom: 15px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      background-color: rgba(255,255,255,0.95);
+      color: #333;
+    }
+
+    .donation-form input:focus,
+    .donation-form select:focus {
+      outline: 2px solid #f39c12;
+    }
+
+    .donation-form button {
+      width: 100%;
+      padding: 14px;
+      font-size: 18px;
+      background-color: #f39c12;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    .donation-form button:hover {
+      background-color: #d35400;
+    }
+
+    .success-message {
+      margin-top: 15px;
+      text-align: center;
+      color: #2ecc71;
+      display: none;
+    }
+
+    @media (max-width: 600px) {
+      .donation-container {
+        padding: 20px;
+        border-radius: 15px;
+      }
+
+      .donation-form button {
+        font-size: 16px;
+        padding: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="donation-container">
+    <h2>💛 Donate to a Hunger-Prone Area</h2>
+    <form id="donationForm" class="donation-form">
+      <input type="text" id="donorName" placeholder="Your Full Name" required>
+      <input type="number" id="donationAmount" placeholder="Amount (₹)" min="10" required>
+
+      <select id="donationLocation" required>
+        <option value="" disabled selected>Select Hunger-Prone Area</option>
+        <option value="Vijayawada">Vijayawada</option>
+        <option value="Visakhapatnam">Visakhapatnam</option>
+        <option value="Guntur">Guntur</option>
+        <option value="Tirupati">Tirupati</option>
+        <option value="Kurnool">Kurnool</option>
+        <option value="Anantapur">Anantapur</option>
+        <option value="Nellore">Nellore</option>
+      </select>
+
+      <select id="paymentType" required>
+        <option value="" disabled selected>Select Payment Method</option>
+        <option value="UPI">UPI</option>
+        <option value="Credit Card">Credit Card</option>
+        <option value="Debit Card">Debit Card</option>
+        <option value="Net Banking">Net Banking</option>
+        <option value="Wallet">Wallet</option>
+      </select>
+
+      <input type="text" id="donationReason" placeholder="Why are you donating? (1 line)" maxlength="100" required>
+
+      <button type="submit">Submit Donation 🙏</button>
+      <p id="successMsg" class="success-message">Thank you for your support! 💚</p>
+    </form>
+  </div>
+
+  <script>
+    document.getElementById("donationForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+
+      const name = document.getElementById("donorName").value;
+      const amount = document.getElementById("donationAmount").value;
+      const location = document.getElementById("donationLocation").value;
+      const payment = document.getElementById("paymentType").value;
+      const reason = document.getElementById("donationReason").value;
+
+      console.log("Donation Submitted:", {
+        name, amount, location, payment, reason
+      });
+
+      // Reset and show thank you
+      this.reset();
+      const successMsg = document.getElementById("successMsg");
+      successMsg.style.display = "block";
+      setTimeout(() => successMsg.style.display = "none", 5000);
+    });
+  </script>
+</body>
+</html>

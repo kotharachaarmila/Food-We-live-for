@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+    <html lang=" en">
+        <head>
+            <meta charset="UTF-8">
+            <meta http-equiv="X-UA-Compatible" content="IE=edge">
+            <meta name="viewport" content="width=device-width,intial-scale=1.0">
+
+            <title>Food We Live For</title>
+            <link rel="stylesheet" href="style.css">
+            <link rel="stylesheet"href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"/>
+
+            <style></style>
+        </head>
+        <body>
+            <header>
+                <h2 class="logo">HUNGER</h2>
+                <nav class="navigation">
+                  <button  class="btnhome-popup">Home</button>
+                  <button  class="btnabout-popup">About</button>
+                  <button class="btnDonate-popup">Donate</button>
+                  <button class="btnquiz-popup">Quiz</button>
+                  <button onclick="logout()" id="logoutBtn" 
+                  class="styled-btn" style="display: none; position: absolute; top: 10px; right: 10px;">Logout</button>
+                  
+                </nav>
+            </header>
+            
+            <div id="donatepopup">
+                 <span class="icon-close"><ion-icon name="close"></ion-icon></span>
+                <h2>Donate Now</h2>
+                <form>
+                    <input type="text" placeholder="Your Name" required>
+                    <input type="email" placeholder="Email Address" required>
+                    <input type="number" placeholder="Amount (INR)" required>
+                    <select required>
+                        <option value="" disabled selected>Select Purpose</option>
+                        <option value="food">Food for Needy</option>
+                        <option value="education">Child Education</option>
+                        <option value="medical">Medical Help</option>
+                    </select>
+                    <button type="submit">Donate</button>
+                </form>
+            </div>
+            <section id="home">
+                <h1>Welcome to Food We Live For 🍲</h1>
+                <p>Explore, play quizzes, and contribute to a healthier food world!</p>
+                <a href="login.html" class="styled-btn">Login</a>
+            </section>
+            
+            
+            <section id="about">
+                <h1>About This Site</h1>
+                <p>This website is designed to engage users with fun food-related quizzes and provide donation options...</p>
+                <a href="explore.html" class="explore-btn">Explore Now 🚀</a>
+            </section>
+            <section id="story-wall" class="story-section fade-in">
+  <h2>🌾 Wall of Inspiring Farmer Stories</h2>
+
+  <div class="story-wall">
+    <div class="story-card">
+      <img src="https://images.unsplash.com/photo-1574175678938-c26b5f04258e" alt="Farmer 1">
+      <strong>Ramesh - Maharashtra</strong>
+      <p>Ramesh turned his 2-acre dry land into a thriving organic farm using rainwater harvesting and natural fertilizers. He now trains 50+ other farmers every month.</p>
+    </div>
+
+    <div class="story-card">
+      <img src="https://images.unsplash.com/photo-1615424795420-e692ccb1fdff" alt="Farmer 2">
+      <strong>Geeta - Tamil Nadu</strong>
+      <p>Geeta, a widow and mother of two, started a rooftop vegetable farm during lockdown. Her produce now feeds 20 nearby families at low cost.</p>
+    </div>
+
+    <div class="story-card">
+      <img src="https://images.unsplash.com/photo-1617191516009-799a989c169e" alt="Farmer 3">
+      <strong>Iqbal - Punjab</strong>
+      <p>Iqbal switched from chemical farming to sustainable practices. He now uses cow dung biogas, compost, and drip irrigation to save water and improve soil health.</p>
+    </div>
+
+    <div class="story-card">
+      <img src="https://images.unsplash.com/photo-1500660217330-d79e8eab5172" alt="Farmer 4">
+      <strong>Sunita - Bihar</strong>
+      <p>Sunita leads a self-help group of 20 women farmers. They grow millet and lentils, manage finances together, and now export to nearby districts.</p>
+    </div>
+  </div>
+</section>
+                <div class="profile-box" id="profile-box" style="display:none;">
+                    <p>Welcome, <span id="profile-name"></span>!</p>
+                    <input type="file" id="profile-pic" accept="image/*">
+                    <img id="profile-preview" src="" alt="Profile Picture">
+                </div>
+                <p id="spotCount" class="spot-count"></p>
+                <section id="hunger-map-section" class="map-section fade-in">
+                    <h2>🗺 Find Local Hunger Spots</h2>
+                    <div id="map" style="height: 80vh; width: 100%; border-radius: 15px;"></div>
+                    <button class="donate-btn" onclick="location.href='donate.html'">🍽 Donate Now</button>
+                </section>
+                <section id="pledge-wall" class="pledge-section fade-in">
+                    <h2>🌟 Make a Pledge to Fight Hunger</h2>
+                    <form id="pledgeForm">
+                        <input type="text" id="pledgeName" placeholder="Your Name" required>
+                        <input type="text" id="pledgeMessage" placeholder="Your Pledge" required>
+                        <button type="submit">Submit Pledge</button>
+                    </form>
+                    <div id="pledgeDisplay" class="pledge-wall">
+                     <!-- Pledges will appear here -->
+                    </div>
+                </section>
+                <section class="thank-you-section">
+  <h2>Thank You for Your Support!</h2>
+  <p>We appreciate your efforts in helping achieve Zero Hunger. Every step matters!</p>
+</section>
+                
+            <script src="script.js"></script>
+            <script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+            <script nomodule src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.js"></script>
+            <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC4UuqdRl7L3JLpTzVc6fyM4IHvRJ56c2o&callback=initMap"></script>
+        </body>
+    </html>
